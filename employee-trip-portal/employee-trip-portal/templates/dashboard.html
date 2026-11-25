@@ -1,0 +1,17 @@
+{% extends "base.html" %}{% block content %}
+<div class="stats">{% for s, n in stats.items() %}<div class="stat"><b>{{ n }}</b>{{ s }}</div>{% endfor %}</div>
+<div class="card"><h2>My Trips</h2>
+{% if trips %}<table>
+<tr><th>Destination</th><th>Dates</th><th>Cost</th><th>Status</th><th>Manager note</th><th></th></tr>
+{% for t in trips %}<tr>
+<td><b>{{ t.destination }}</b><br><small>{{ t.purpose }}</small></td>
+<td>{{ t.start_date }} → {{ t.end_date }}</td>
+<td>{{ '%.2f'|format(t.estimated_cost) }}</td>
+<td><span class="badge {{ t.status }}">{{ t.status }}</span></td>
+<td>{{ t.manager_comment }}</td>
+<td>{% if t.status == 'Pending' %}
+<a class="btn" href="{{ url_for('edit_trip', trip_id=t.id) }}">Edit</a>
+<form class="inline" method="post" action="{{ url_for('cancel_trip', trip_id=t.id) }}" onsubmit="return confirm('Cancel this trip?')"><button class="danger">Cancel</button></form>
+{% endif %}</td></tr>{% endfor %}</table>
+{% else %}<p>No trips yet. <a href="{{ url_for('new_trip') }}">Create a request</a>.</p>{% endif %}</div>
+{% endblock %}

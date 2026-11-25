@@ -1,0 +1,20 @@
+{% extends "base.html" %}{% block content %}
+<div class="card"><h2>Trip Approvals</h2>
+<p>{% for s in ['Pending','Approved','Rejected','Cancelled','All'] %}
+<a class="btn" style="{{ '' if s == status else 'opacity:.55' }}" href="{{ url_for('manage', status=s) }}">{{ s }}</a> {% endfor %}</p>
+{% if trips %}<table>
+<tr><th>Employee</th><th>Trip</th><th>Dates</th><th>Cost</th><th>Status</th><th>Decision</th></tr>
+{% for t in trips %}<tr>
+<td>{{ t.employee }}<br><small>{{ t.department }}</small></td>
+<td><b>{{ t.destination }}</b><br><small>{{ t.purpose }}</small></td>
+<td>{{ t.start_date }} → {{ t.end_date }}</td>
+<td>{{ '%.2f'|format(t.estimated_cost) }}</td>
+<td><span class="badge {{ t.status }}">{{ t.status }}</span></td>
+<td>{% if t.status == 'Pending' %}
+<form method="post" action="{{ url_for('decide', trip_id=t.id) }}">
+<input name="comment" placeholder="Comment (optional)">
+<button class="ok" name="decision" value="Approved">Approve</button>
+<button class="danger" name="decision" value="Rejected">Reject</button></form>
+{% else %}{{ t.manager_comment }}{% endif %}</td></tr>{% endfor %}</table>
+{% else %}<p>No trips found.</p>{% endif %}</div>
+{% endblock %}

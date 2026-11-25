@@ -1,0 +1,11 @@
+{% extends "base.html" %}{% block content %}
+<div class="card"><h2>{{ 'Edit' if editing else 'New' }} Trip Request</h2>
+<form method="post">
+<label>Destination</label><input name="destination" value="{{ trip.destination or '' }}" required>
+<label>Purpose</label><textarea name="purpose" rows="3" required>{{ trip.purpose or '' }}</textarea>
+<label>Start date</label><input type="date" name="start_date" value="{{ trip.start_date or '' }}" required>
+<label>End date</label><input type="date" name="end_date" value="{{ trip.end_date or '' }}" required>
+<label>Estimated cost</label><input type="number" step="0.01" min="0" name="estimated_cost" value="{{ trip.estimated_cost if trip.estimated_cost is not none else '' }}" required><br><br>
+<button>{{ 'Save changes' if editing else 'Submit request' }}</button>
+<a href="{{ url_for('dashboard') }}">Cancel</a></form></div>
+{% endblock %}
